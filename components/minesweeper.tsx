@@ -1,131 +1,16 @@
 import React, { useEffect, useState } from "react";
-
+import { CELL_VALUES, CELL_STYLES, Coordinate, Board, GAME_STATE } from "../types";
+import { checkNeighbors, placeBombs, addFlag, getClassname } from "../utils";
+import Options from "./options";
 interface Props {}
-
-type Board = Array<Array<CELL_VALUES>>;
-
-interface Coordinate {
-  x: number;
-  y: number;
-}
-
-enum GAME_STATE {
-  WIN = "WIN",
-  PLAYING = "PLAYING",
-  LOSE = "LOSE",
-}
-
-enum CELL_STYLES {
-  FLAG = "bg-gray-400",
-  IDLE = "bg-gray-400 text-none",
-  BOMB = "bg-gray-400 text-none",
-  BOMB_TOUCHED = "bg-white",
-}
-
-enum CELL_VALUES {
-  FLAG = "🚩",
-  TOUCHED_BOMB = "💣",
-  BOMB = -1,
-  EMPTY = "",
-  ONE_BOMB = 1,
-  TWO_BOMB = 2,
-  THREE_BOMB = 3,
-  FOUR_BOMB = 4,
-  FIVE_BOMB = 5,
-  SIX_BOMB = 6,
-  SEVEN_BOMB = 7,
-  EIGHT_BOMB = 8,
-  IDLE = 9,
-}
-
-const getClassname = (cell: string | number): CELL_STYLES => {
-  const { IDLE, BOMB, TOUCHED_BOMB, FLAG } = CELL_VALUES;
-  switch (cell) {
-    case IDLE:
-      return CELL_STYLES.IDLE;
-    case FLAG:
-      return CELL_STYLES.FLAG;
-    case TOUCHED_BOMB:
-      return CELL_STYLES.BOMB_TOUCHED;
-    case BOMB:
-      return CELL_STYLES.BOMB;
-    default:
-      break;
-  }
-};
-
-export const createBoard = (rows: number, columns: number): Board => {
-  return Array(rows)
-    .fill(undefined)
-    .map(() => Array(columns).fill(CELL_VALUES.IDLE));
-};
-
-export const getRandomNumber = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-export const getCoords = (rows: number, columns: number): Coordinate => ({
-  x: getRandomNumber(0, rows),
-  y: getRandomNumber(0, columns),
-});
-
-export const placeBombs = (bombs: number, rows: number, columns: number): Board => {
-  const board = createBoard(rows, columns);
-  for (let index = 0; index < bombs; index++) {
-    let bomb = getCoords(rows, columns);
-    while (board[bomb.x][bomb.y] === CELL_VALUES.BOMB) {
-      bomb = getCoords(rows, columns);
-    }
-
-    board[bomb.x][bomb.y] = CELL_VALUES.BOMB;
-  }
-
-  return board;
-};
-
-const checkNeighbors = (x: number, y: number, startingBoard: Board): CELL_VALUES.EMPTY | number => {
-  const { BOMB, EMPTY } = CELL_VALUES;
-  let bombQuantity = 0;
-  for (let i = -1; i <= 1; i++) {
-    if (startingBoard[x + i] !== undefined) {
-      for (let j = -1; j <= 1; j++) {
-        if (startingBoard[x + i][y + j] !== undefined) {
-          if (startingBoard[x + i][y + j] === BOMB) bombQuantity++;
-        }
-      }
-    }
-  }
-  if (bombQuantity === 0) return EMPTY;
-  return bombQuantity;
-};
-
-const addFlag = (
-  event: React.MouseEvent,
-  x: number,
-  y: number,
-  board: Board,
-  setBoardCallback: React.Dispatch<React.SetStateAction<Board>>,
-  cell: CELL_VALUES,
-  gameStatus: GAME_STATE
-): void => {
-  event.preventDefault();
-  const { IDLE, FLAG, BOMB } = CELL_VALUES;
-  if (gameStatus !== GAME_STATE.PLAYING) return;
-
-  if (board[x][y] === FLAG) {
-    board[x][y] = cell;
-    return setBoardCallback([...board]);
-  }
-  if (cell === IDLE || cell === BOMB) {
-    board[x][y] = FLAG;
-    return setBoardCallback([...board]);
-  }
-};
+import { useTranslation } from "react-i18next";
 
 const MineSweeper = (props: Props) => {
-  const rows = 5;
-  const columns = 6;
-  const bombs = 5;
+  const { t, i18n } = useTranslation();
+  const [rows, setRows] = useState(5);
+  const [columns, setColumns] = useState(6);
+  const [bombs, setBombs] = useState(5);
+
   const [board, setBoard] = useState([[]]);
   const [flagsBoard, setFlagsBoard] = useState([[]]);
   const [referenceBoard, setReferenceBoard] = useState([[]]);
@@ -183,7 +68,6 @@ const MineSweeper = (props: Props) => {
 
   useEffect(() => {
     checkVictory();
-    console.log(checkScore(board));
     setScore(checkScore(board));
   }, [score]);
 
@@ -232,17 +116,25 @@ const MineSweeper = (props: Props) => {
 
   return (
     <div className="w-screen h-screen text-center">
-      <h1 className="text-xl my-6">Buscaminas</h1>
-      <h2>Score: {score}</h2>
+      <button onClick={() => i18n.changeLanguage("es")}>{t("spanish")}</button>
+      <button onClick={() => i18n.changeLanguage("en")}>{t("english")}</button>
 
-      <button
-        onClick={() => {
-          startGame();
-        }}
-        className="bg-purple-500 rounded-sm text-gray-200 px-4 py-2"
-      >
-        Reset
-      </button>
+      <h1 className="text-xl my-6">{t("title")}</h1>
+
+      <Options
+        rows={rows}
+        columns={columns}
+        bombs={bombs}
+        setRows={setRows}
+        setColumns={setColumns}
+        setBombs={setBombs}
+        startGame={startGame}
+      />
+
+      <h2>
+        {t("score")}: {score}
+      </h2>
+
       {gameStatus !== GAME_STATE.PLAYING && <h2> {gameStatus} </h2>}
       {board && renderBoard(board)}
     </div>

@@ -1,0 +1,26 @@
+{
+  "es": {
+    "translation": {
+      "title": "Buscaminas",
+      "spanish": "Español",
+      "english": "Ingles",
+      "rows": "Filas",
+      "columns": "Columnas",
+      "bombs": "Bombas",
+      "new game": "Nueva partida",
+      "score": "Puntaje"
+    }
+  },
+  "en": {
+    "translation": {
+      "title": "Minesweeper",
+      "spanish": "Spanish",
+      "english": "English",
+      "rows": "Rows",
+      "columns": "Columns",
+      "bombs": "Bombs",
+      "new game": "New game",
+      "score": "Score"
+    }
+  }
+}
