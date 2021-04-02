@@ -1,5 +1,7 @@
 import { CELL_VALUES, CELL_STYLES, Coordinate, Board, GAME_STATE } from "./types";
-
+import { useState, useEffect } from "react";
+import Cell from "./components/Cell";
+import Options from "./components/options";
 export const createBoard = (rows: number, columns: number): Board => {
   return Array(rows)
     .fill(undefined)
@@ -83,3 +85,5 @@ export const addFlag = (
     return setBoardCallback([...board]);
   }
 };
+export const checkScore = (board: Board): number =>
+  board.flat().filter((item) => item !== CELL_VALUES.IDLE && item !== CELL_VALUES.BOMB).length;
