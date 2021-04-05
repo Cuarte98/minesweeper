@@ -15,7 +15,7 @@ const Options = ({ rows, columns, bombs, setRows, setColumns, setBombs, startGam
   const { t } = useTranslation();
   return (
     <div>
-      <div className="absolute shadow-lg bg-purple-200 top-4 left-4 rounded py-2 px-4 flex flex-col items-center">
+      <div className="w-96 mx-auto shadow-lg bg-purple-200 top-4 left-4 rounded py-2 px-4 flex flex-col items-center">
         {t("rows")}
         <input
           className="border-gray-700 border mb-2"
