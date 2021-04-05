@@ -8,7 +8,9 @@
       "columns": "Columnas",
       "bombs": "Bombas",
       "new game": "Nueva partida",
-      "score": "Puntaje"
+      "score": "Puntaje",
+      "WIN": "GANASTE",
+      "LOSE": "PERDISTE"
     }
   },
   "en": {
@@ -20,7 +22,9 @@
       "columns": "Columns",
       "bombs": "Bombs",
       "new game": "New game",
-      "score": "Score"
+      "score": "Score",
+      "WIN": "WIN",
+      "LOSE": "LOSE"
     }
   }
 }

@@ -59,6 +59,9 @@ export const checkNeighbors = (x: number, y: number, startingBoard: Board): CELL
 };
 
 export const checkScore = (board: Board): number =>
-  board.flat().filter((item) => item !== CELL_VALUES.IDLE && item !== CELL_VALUES.BOMB).length;
+  board
+    .flat()
+    .filter((item) => item !== CELL_VALUES.IDLE && item !== CELL_VALUES.BOMB && item !== CELL_VALUES.BOMB_TOUCHED)
+    .length;
 
 export const copyBoard = (board: Board): Board => JSON.parse(JSON.stringify(board));

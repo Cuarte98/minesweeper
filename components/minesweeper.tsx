@@ -21,7 +21,7 @@ const MineSweeper = () => {
         {t("score")}: {score}
       </h2>
 
-      {gameStatus !== GAME_STATE.PLAYING && <h2> {gameStatus} </h2>}
+      {gameStatus !== GAME_STATE.PLAYING && <h2> {t(gameStatus)} </h2>}
       {board && renderBoard()}
     </div>
   );
