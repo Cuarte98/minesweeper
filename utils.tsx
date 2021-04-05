@@ -1,7 +1,5 @@
 import { CELL_VALUES, CELL_STYLES, Coordinate, Board, GAME_STATE } from "./types";
-import { useState, useEffect } from "react";
-import Cell from "./components/Cell";
-import Options from "./components/options";
+
 export const createBoard = (rows: number, columns: number): Board => {
   return Array(rows)
     .fill(undefined)
@@ -9,18 +7,15 @@ export const createBoard = (rows: number, columns: number): Board => {
 };
 
 export const getClassname = (cell: string | number): CELL_STYLES => {
-  const { IDLE, BOMB, TOUCHED_BOMB, FLAG } = CELL_VALUES;
+  const { IDLE, BOMB, BOMB_TOUCHED, FLAG } = CELL_VALUES;
   switch (cell) {
     case IDLE:
+    case BOMB:
       return CELL_STYLES.IDLE;
     case FLAG:
       return CELL_STYLES.FLAG;
-    case TOUCHED_BOMB:
+    case BOMB_TOUCHED:
       return CELL_STYLES.BOMB_TOUCHED;
-    case BOMB:
-      return CELL_STYLES.BOMB;
-    default:
-      break;
   }
 };
 
@@ -63,27 +58,7 @@ export const checkNeighbors = (x: number, y: number, startingBoard: Board): CELL
   return bombQuantity;
 };
 
-export const addFlag = (
-  event: React.MouseEvent,
-  x: number,
-  y: number,
-  board: Board,
-  setBoardCallback: React.Dispatch<React.SetStateAction<Board>>,
-  cell: CELL_VALUES,
-  gameStatus: GAME_STATE
-): void => {
-  event.preventDefault();
-  const { IDLE, FLAG, BOMB } = CELL_VALUES;
-  if (gameStatus !== GAME_STATE.PLAYING) return;
-
-  if (board[x][y] === FLAG) {
-    board[x][y] = cell;
-    return setBoardCallback([...board]);
-  }
-  if (cell === IDLE || cell === BOMB) {
-    board[x][y] = FLAG;
-    return setBoardCallback([...board]);
-  }
-};
 export const checkScore = (board: Board): number =>
   board.flat().filter((item) => item !== CELL_VALUES.IDLE && item !== CELL_VALUES.BOMB).length;
+
+export const copyBoard = (board: Board): Board => JSON.parse(JSON.stringify(board));

@@ -14,13 +14,12 @@ export enum GAME_STATE {
 export enum CELL_STYLES {
   FLAG = "bg-gray-400",
   IDLE = "bg-gray-400 text-none",
-  BOMB = "bg-gray-400 text-none",
   BOMB_TOUCHED = "bg-white",
 }
 
 export enum CELL_VALUES {
   FLAG = "🚩",
-  TOUCHED_BOMB = "💣",
+  BOMB_TOUCHED = "💣",
   BOMB = -1,
   EMPTY = "",
   ONE_BOMB = 1,
